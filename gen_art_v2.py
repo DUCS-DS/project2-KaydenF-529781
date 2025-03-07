@@ -68,6 +68,8 @@ pygame.init()
 pygame.display.set_caption("Triangles v2")
 pygame.event.set_allowed([pygame.QUIT, pygame.KEYUP, pygame.KEYDOWN])
 
+
+
 # create nodes
 nodes = []
 for i in range(num_nodes):
@@ -76,6 +78,9 @@ for i in range(num_nodes):
     speed = random.randint(150, 200) / 600
     angle = radians(random.randint(0, 359))
     nodes.append(Node(x, y, speed, angle))
+
+def getx(node):
+        return node.x
 
 # the game loop: (press q to quit)
 quit = False
@@ -97,9 +102,13 @@ while not quit:
         node.reflect()
         node.draw()
 
+    #Takes O(n log n)
+    nodes = sorted(nodes, key=getx)    
+
+    #Takes O(n)
     for i, node1 in enumerate(nodes):
         x1, y1 = node1.x, node1.y
-        for node2 in nodes[i + 1 :]:
+        for node2 in nodes[i+1:i+20]:
             x2, y2 = node2.x, node2.y
             d_squared = (x1 - x2) ** 2 + (y1 - y2) ** 2
             if d_squared < thresh:
